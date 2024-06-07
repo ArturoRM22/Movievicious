@@ -23,12 +23,6 @@ export const callHealthEndpoint = async (port) => {
     } catch (error) {
         console.error('Error calling health endpoint:', error);
     }
-    try {
-        const response = await axios.post(`http://localhost:${port}/api/rank/ksBQ4oHQDdJwND8H90ay8CbMihU/1/4`);
-        console.log('Database status:', response.data.status);
-    } catch (error) {
-        console.error('Error calling health endpoint:', error);
-    }
 };
 
 app.use((req, res)=>{
