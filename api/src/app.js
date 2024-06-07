@@ -10,7 +10,7 @@ const app = express();
 app.use(cors()); // allows requests from anywhere 
 app.use(express.json());
 
-app.use('/api',Movieroutes);
+app.use('/api', Movieroutes);
 
 /* app.get('/api',(req, res) =>{
   res.send("Hola");
@@ -19,12 +19,11 @@ app.use('/api',Movieroutes);
 export const callHealthEndpoint = async (port) => {
     try {
         const response = await axios.get(`http://localhost:${port}/api/health`);
-        console.log('Health check response:', response.data);
+        console.log('Database status:', response.data.status);
     } catch (error) {
         console.error('Error calling health endpoint:', error);
     }
 };
-
 
 app.use((req, res)=>{
     res.status(404).json({

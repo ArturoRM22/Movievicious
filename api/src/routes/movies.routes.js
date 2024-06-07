@@ -5,6 +5,10 @@ const router  = Router();
 
 router.get('/health', moviesController.testConnection);
 
+router.get('/movie/:id', moviesController.getMovieDetails);
+
+router.get('/popular/:page', moviesController.getPopularMovies);
+
 export default router;
 
 
