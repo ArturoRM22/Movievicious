@@ -54,11 +54,40 @@ const getPopularMovies = async(req, res)=>{
         res.status(500).json({ error: error.message });
     }
 }
+// Working. To be implemented
+const getUserDetails = async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM Users');
+        console.log(rows)
+        res.status(200).json({ status: 'success', data: rows });
+    } catch (error) {
+        console.error('Database connection error:', error);
+        res.status(500).json({ status: 'error', message: 'Failed to fetch users' });
+    }
+};
+// Not working. To be implemented
+const postUserRanked = async (req, res) => {
+    const { userId, movieId, ranking } = req.body;
+
+    try {
+        const result = await pool.query('INSERT INTO Ranks (user_id, tmdb_id, ranking) VALUES (?, ?, ?)', [userId, movieId, ranking]);
+        if (result.affectedRows === 1) {
+            res.status(200).json({ status: 'success', message: 'Ranking added successfully' });
+        } else {
+            res.status(500).json({ status: 'error', message: 'Failed to add ranking' });
+        }
+    } catch (error) {
+        console.error('Database connection error:', error);
+        res.status(500).json({ status: 'error', message: 'Failed to add ranking' });
+    }
+};
 
 
 
 export const methods = {
     testConnection,
     getMovieDetails,
-    getPopularMovies
+    getPopularMovies,
+    getUserDetails,
+    postUserRanked
 };

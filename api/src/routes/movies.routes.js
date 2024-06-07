@@ -9,6 +9,10 @@ router.get('/movie/:id', moviesController.getMovieDetails);
 
 router.get('/popular/:page', moviesController.getPopularMovies);
 
+router.get('/users', moviesController.getUserDetails);
+
+router.post('/rank/:movieId/:userId/:ranking', moviesController.postUserRanked);
+
 export default router;
 
 

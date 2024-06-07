@@ -12,5 +12,7 @@
     - DATABASE = movicios
     - PORT = 
     - DB_PORT = 3306
+    - API_KEY_AUTH = 
+    - ACCESS_TOKEN_AUTH =
 
 - make sure you have this ""type": "module"," in you package.json
