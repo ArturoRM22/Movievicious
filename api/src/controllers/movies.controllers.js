@@ -45,7 +45,6 @@ const getPopularMovies = async(req, res)=>{
           Authorization: `Bearer ${ACCESS_TOKEN_AUTH}`
         }
       };
-
       try {
         const response = await axios.request(options);
         res.status(200).json(response.data);
@@ -54,7 +53,7 @@ const getPopularMovies = async(req, res)=>{
         res.status(500).json({ error: error.message });
     }
 }
-// Working. To be implemented
+
 const getUserDetails = async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM Users');
@@ -67,12 +66,17 @@ const getUserDetails = async (req, res) => {
 };
 // Not working. To be implemented
 const postUserRanked = async (req, res) => {
-    const { userId, movieId, ranking } = req.body;
+    const { user_id, tmdb_id, ranking } = req.body;
+    //console.log(tmdb_id);
 
     try {
-        const result = await pool.query('INSERT INTO Ranks (user_id, tmdb_id, ranking) VALUES (?, ?, ?)', [userId, movieId, ranking]);
-        if (result.affectedRows === 1) {
-            res.status(200).json({ status: 'success', message: 'Ranking added successfully' });
+        const [result] = await pool.query(
+            'INSERT INTO Ranks (user_id, tmdb_id, ranking) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ranking = ?',
+            [user_id, tmdb_id, ranking, ranking]
+        );
+        //console.log(result);
+        if (result.affectedRows >= 1) {
+                res.status(200).json({ status: 'success', message: 'Ranking added successfully' });
         } else {
             res.status(500).json({ status: 'error', message: 'Failed to add ranking' });
         }
@@ -81,8 +85,6 @@ const postUserRanked = async (req, res) => {
         res.status(500).json({ status: 'error', message: 'Failed to add ranking' });
     }
 };
-
-
 
 export const methods = {
     testConnection,
