@@ -94,7 +94,7 @@
             const rating = document.querySelector('input[name="rating"]:checked').value;
             const userId = 1; // This should be dynamically retrieved from the session
 
-            axios.post('http://localhost:5000/api/rank', {
+            axios.post('http://localhost:3001/api/rank', {
                 user_id: userId,
                 tmdb_id: movieId,
                 ranking: rating
