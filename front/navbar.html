@@ -26,7 +26,7 @@
 </nav>
 
 <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Modals -->
 <div class="modal fade text-white" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" data-bs-theme="dark">
@@ -59,10 +59,10 @@
                 <button type="button" class="btn-close round" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="loginForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="email" class="form-control round" id="loginEmail" name="username" required>
+                        <input type="text" class="form-control round" id="username" name="username" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label ">Password</label>
