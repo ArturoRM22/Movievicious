@@ -6,35 +6,34 @@
     <title>Movicious</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        .custom-width {
-            width: 40px;
+        body {
+            padding-top: 90px; /* Ajusta este valor según la altura de tu navbar */
+            padding-bottom: 10px;
+        }
+        .bg-gray {
+            background-color: #18181b;
+        }
+        .custom-card {
+            max-width: 18rem; /* Adjust max-width as needed */
         }
         .star-rating {
-            display: inline-block;
-            font-size: 2rem;
+            font-size: 1.5rem; /* Adjust font size for smaller cards */
             color: #ddd;
         }
         .star-rating .filled {
             color: #f5c518;
         }
-        .bg-gray {
-            background-color: #18181b;
-        }
-        body {
-            padding-top: 50px; /* Ajusta este valor según la altura de tu navbar */
-            padding-bottom: 10px;
-        }
         .star-rating2 {
             direction: rtl;
             display: inline-block;
         }
-        .star-rating2 input[type="radio"] {
-            display: none;
-        }
         .star-rating2 label {
-            font-size: 2rem;
+            font-size: 1.5rem; /* Adjust font size for smaller cards */
             color: #ddd;
             cursor: pointer;
+        }
+        .star-rating2 input[type="radio"] {
+            display: none;
         }
         .star-rating2 input[type="radio"]:checked ~ label,
         .star-rating2 input[type="radio"]:hover ~ label,
@@ -42,77 +41,59 @@
         .star-rating2 label:hover ~ label {
             color: #f5c518;
         }
-        .round{
-            border-radius: 50px;
-        }
-        .pl{
-            padding-left: 30px;
-        }
         .round {
             border-radius: 50px;
         }
+        .pl {
+            padding-left: 15px; /* Adjust padding as needed */
+        }
         .pt {
-            padding-top: 20px;
+            padding-top: 10px; /* Adjust padding as needed */
         }
         .hidden {
             display: none;
+        }
+        .card {
+            background-color: #18181b; /* Background color */
+            color: #ddd; /* Text color */
+            border: none; /* Remove default border */
+        }
+        .card-title {
+            color: #ddd; /* Title text color */
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-img-top {
+            border-radius: 0.5rem; /* Adjust image border radius */
+        }
+        .btn-outline-info {
+            color: #f5c518; /* Button text color */
+            border-color: #f5c518; /* Button border color */
+        }
+        .btn-outline-info:hover {
+            color: #18181b; /* Button text color on hover */
+            background-color: #f5c518; /* Button background color on hover */
         }
     </style>
 </head>
 <body class="bg-gray">
    <div id="navbar"></div>
+   <a href="index.html" class="btn btn-outline-info round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5"/>
+    </svg> Go back
+</a>
    <div class="container-fluid">
-    <div class="container mt-5">
-        <div class="card height-cards" style="width: 18rem;" data-bs-theme="dark">
-            <img src="https://media.themoviedb.org/t/p/w300_and_h450_bestv2/ksBQ4oHQDdJwND8H90ay8CbMihU.jpg" class="card-img-top" alt="...">
-            <div class="card-body text-center">
-                <h5 class="card-title">Movie</h5>
-                <p>Grade of the movie</p>
-                <div class="star-rating" id="star-rating-fixed" data-rating="3"></div>
-                <p class="card-text">Description of the movie</p>
-                <div class="container mt-5 hidden" id="star-rating2-movable">
-                    <p>Your Grade of the movie</p>
-                    <div class="star-rating2">
-                        <input type="radio" id="star5-movable" name="rating" value="5" /><label for="star5-movable" title="5 stars">★</label>
-                        <input type="radio" id="star4-movable" name="rating" value="4" /><label for="star4-movable" title="4 stars">★</label>
-                        <input type="radio" id="star3-movable" name="rating" value="3" /><label for="star3-movable" title="3 stars">★</label>
-                        <input type="radio" id="star2-movable" name="rating" value="2" /><label for="star2-movable" title="2 stars">★</label>
-                        <input type="radio" id="star1-movable" name="rating" value="1" /><label for="star1-movable" title="1 star">★</label>
-                    </div>
-                </div>
-                <button id="btn-change-grade" class="btn btn-outline-info round">Change your grade of this Movie</button>
-            </div>
-        </div>
-    </div>
+       <div class="row mt-5" id="movie-container">
+           <!-- Movies will be dynamically added here -->
+       </div>
    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script src="js/userRanking.js"></script>
     <script src="js/loadNavbar.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const starRatings = document.querySelectorAll('.star-rating');
-            starRatings.forEach(rating => {
-                const ratingValue = parseInt(rating.getAttribute('data-rating'));
-                for (let i = 1; i <= 5; i++) {
-                    const star = document.createElement('span');
-                    star.innerHTML = '★';
-                    if (i <= ratingValue) {
-                        star.classList.add('filled');
-                    }
-                    rating.appendChild(star);
-                }
-            });
-
-            const btnChangeGrade = document.getElementById('btn-change-grade');
-            btnChangeGrade.addEventListener('click', function() {
-                const starRatingFixed = document.getElementById('star-rating-fixed');
-                const starRatingMovable = document.getElementById('star-rating2-movable');
-                starRatingFixed.classList.add('hidden');
-                starRatingMovable.classList.remove('hidden');
-                this.textContent = 'Save the grade';
-                this.href = '#';
-            });
-        });
-    </script>
-    </body>
+</body>
 </html>

@@ -78,7 +78,7 @@
    <script>
     document.addEventListener('DOMContentLoaded', async function() {
         const movieId = getMovieIdFromUrl();
-        console.log(movieId);
+        //console.log(movieId);
 
         function getMovieIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -86,13 +86,13 @@
         }
 
         if (movieId) {
-            console.log("Intentó");
+            //console.log("Intentó");
             await getMovieDetails(movieId);
         }
 
         function submitRanking(movieId) {
             const rating = document.querySelector('input[name="rating"]:checked').value;
-            const userId = 1; // This should be dynamically retrieved from the session
+            const userId = 2; // This should be dynamically retrieved from the session
 
             axios.post('http://localhost:3001/api/rank', {
                 user_id: userId,
