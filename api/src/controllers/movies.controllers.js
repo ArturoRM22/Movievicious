@@ -34,16 +34,6 @@ const getPopularMovies = async(req, res)=>{
     }
 }
 
-const getUserDetails = async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM Users');
-        console.log(rows)
-        res.status(200).json({ status: 'success', data: rows });
-    } catch (error) {
-        console.error('Database connection error:', error);
-        res.status(500).json({ status: 'error', message: 'Failed to fetch users' });
-    }
-};
 // Not working. To be implemented
 const postUserRanked = async (req, res) => {
     const { user_id, tmdb_id, ranking } = req.body;
@@ -128,7 +118,6 @@ export const methods = {
     testConnection,
     getMovieDetails,
     getPopularMovies,
-    getUserDetails,
     postUserRanked,
     getUserRanksWithDetails
 };

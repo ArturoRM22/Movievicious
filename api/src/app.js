@@ -1,36 +1,65 @@
 import express from 'express';
 import cors from 'cors';
-import Movieroutes from './routes/movies.routes.js';
-import axios from 'axios';
-import session from 'express-session'; // Add session support
+import session from 'express-session';
 import passport from 'passport';
-import bcrypt from 'bcryptjs'; // For hashing passwords
-import { Strategy as LocalStrategy } from 'passport-local'; // Local strategy for username/password
+import axios from 'axios';
+import { Strategy as LocalStrategy } from 'passport-local';
+import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import User from './models/user.js'
-
+import jwt from 'jsonwebtoken';
+import User from './models/user.js';
+import Movieroutes from './routes/movies.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 const app = express();
 
-//middlewares 
-app.use(cors()); // allows requests from anywhere 
-app.use(express.json());
+// CORS configuration
+const allowedOrigins = ['http://127.0.0.1:5500'];
 
-const secret = crypto.randomBytes(32).toString('hex');
-// Session middleware (required for passport)
-app.use(session({
-    secret: secret,
-    resave: false,
-    saveUninitialized: false
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
 }));
 
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+// JSON middleware
+app.use(express.json());
+
+// Secret key for JWT
+const jwtSecret = 'your_jwt_secret';
+
+// Example protected route
+app.get('/api/protected', authenticateToken, (req, res) => {
+    res.json({ message: 'You are authenticated!' });
+});
+
+// Middleware to authenticate token
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    jwt.verify(token, jwtSecret, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+        req.user = decoded;
+        next();
+    });
+}
 
 app.use('/api', Movieroutes);
+app.use('/auth', userRoutes);
 
-
+// Health endpoint
 export const callHealthEndpoint = async (port) => {
     try {
         const response = await axios.get(`http://localhost:${port}/api/health`);
@@ -40,58 +69,11 @@ export const callHealthEndpoint = async (port) => {
     }
 };
 
-// Configure Passport local strategy
-passport.use(new LocalStrategy(
-    async (username, password, done) => {
-        try {
-            const user = await User.findByUsername(username);
-
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
-            }
-
-            if (!bcrypt.compareSync(password, user.password)) {
-                return done(null, false, { message: 'Incorrect password.' });
-            }
-
-            return done(null, user);
-        } catch (err) {
-            return done(err);
-        }
-    }
-));
-
-// Serialize user (store user id in session)
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-// Deserialize user (retrieve user from session)
-passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await User.findById(id);
-        done(null, user);
-    } catch (err) {
-        done(err);
-    }
-});
-
-// Example protected route
-app.get('/api/protected', (req, res, next) => {
-    // Check if user is authenticated
-    if (req.isAuthenticated()) {
-        // User is authenticated, return data
-        res.json({ message: 'You are authenticated!' });
-    } else {
-        // User is not authenticated, return 401 Unauthorized
-        res.status(401).json({ message: 'Unauthorized' });
-    }
-});
-
-app.use((req, res)=>{
+// 404 handler
+app.use((req, res) => {
     res.status(404).json({
-        mesagge: 'not found'
-    })
+        message: 'Not found'
+    });
 });
 
 export default app;
