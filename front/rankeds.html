@@ -70,7 +70,7 @@
     </div>
    <div class="container-fluid">
     <div class="container">
-        <div class="card width-card" style="width: 80rem;" data-bs-theme="dark" id="movie-details">
+        <div class="card width-card round" style="width: 80rem;" data-bs-theme="dark" id="movie-details">
             <!-- Movie details will be dynamically inserted here -->
         </div>
     </div>
@@ -121,12 +121,12 @@
                 const movie = await response.json();
                 const movieDetailsContainer = document.getElementById('movie-details');
                 movieDetailsContainer.innerHTML = `
-                    <form id="rank-form">
-                        <div class="row">
-                            <div class="col-3">
-                                <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" class="img" alt="${movie.title}">
+                    <form id="rank-form round">
+                        <div class="row round">
+                            <div class="col-3 round">
+                                <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" class="img round" alt="${movie.title}">
                             </div>
-                            <div class="text-left col-9">
+                            <div class="text-left col-9 pt round">
                                 <h5 class="card-title">${movie.title}</h5>
                                 <p>General grade of the movie</p>
                                 <div class="star-rating" data-rating="${Math.round(movie.vote_average / 2)}"></div>
