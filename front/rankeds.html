@@ -78,11 +78,28 @@
    <script>
     document.addEventListener('DOMContentLoaded', async function() {
         const movieId = getMovieIdFromUrl();
-        //console.log(movieId);
+        const userId = getUserIdFromLocalStorage();
+        console.log(movieId);
 
         function getMovieIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('id');
+        }
+
+        function getUserIdFromLocalStorage() {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                console.error('JWT token not found.');
+                return null;
+            }
+
+            try {
+                const decodedToken = parseJwt(token);
+                return decodedToken.userId;
+            } catch (error) {
+                console.error('Error parsing JWT token:', error);
+                return null;
+            }
         }
 
         if (movieId) {
@@ -92,8 +109,6 @@
 
         function submitRanking(movieId) {
             const rating = document.querySelector('input[name="rating"]:checked').value;
-            const userId = 2; // This should be dynamically retrieved from the session
-
             axios.post('http://localhost:3001/api/rank', {
                 user_id: userId,
                 tmdb_id: movieId,
@@ -166,6 +181,22 @@
                 console.log(`Calificación seleccionada: ${this.value} estrellas`);
             });
         });
+
+// Function to decode JWT token (assuming it's a simple base64 encoded token)
+function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error parsing JWT token:', error);
+                return {};
+            }
+        }
     });
 </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

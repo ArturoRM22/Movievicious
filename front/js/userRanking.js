@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    // Replace with dynamically retrieved user ID or other logic
-    const user_id = 2;
-
     try {
-        // Fetch user rankings from API
+        // Retrieve JWT token from localStorage
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            console.error('JWT token not found.');
+            return;
+        }
+
+        // Decode the token to get user_id
+        const decodedToken = parseJwt(token);
+        console.log(decodedToken)
+        const user_id = decodedToken.userId; // Assuming user_id is stored in the token payload
+        console.log(user_id);
+
+        // Fetch user rankings from API using user_id
         const response = await axios.get(`http://localhost:3001/api/user-ranks/${user_id}`);
         const movies = response.data.data;
 
@@ -111,3 +121,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Error fetching movie data:', error);
     }
 });
+
+// Function to decode JWT token (assuming it's a simple base64 encoded token)
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Error parsing JWT token:', error);
+        return {};
+    }
+}
