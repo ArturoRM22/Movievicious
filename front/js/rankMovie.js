@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const movie = await response.json();
             const movieDetailsContainer = document.getElementById('movie-details');
             movieDetailsContainer.innerHTML = `
-                <form id="rank-form round">
+                <form id="rank-form">
                     <div class="row round">
                         <div class="col-3 round">
                             <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" class="img round" alt="${movie.title}">
