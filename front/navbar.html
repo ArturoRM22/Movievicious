@@ -2,17 +2,17 @@
     <div class="container-fluid">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link active" href="index.html">Movicious</a>
+                <a class="nav-link active round" href="index.html"><img src="https://i.ibb.co/6PQNY7r/Movicious-1.png" class="image" alt="Movicious-1" border="0"></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="yourranks.html">Your Ranks</a>
+                <a class="nav-link pt2 active" href="yourranks.html" id="your_ranks">Your Ranks</a>
             </li>
         </ul>
         <ul>
             <li class="row pt">
-                <button id="loginButton" class="btn btn-outline-info col-2 round" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</button>
-                <button id="signupButton" class="btn btn-outline-info col-2  round" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</button>
-                <button id="logoutButton" class="btn btn-outline-danger col-2  round">Log Out</button> <!-- Add this line for logout button -->
+                <button id="loginButton" class="btn btn-outline-info col-3 round" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</button>
+                <button id="signupButton" class="btn btn-outline-info col-3  round" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</button>
+                <button id="logoutButton" class="btn btn-outline-danger col-4     round">Log Out</button> <!-- Add this line for logout button -->
                 <form id="search-form" class="d-flex ml-auto col-6" role="search">
                     <input id="search-input" class="form-control me-2 round" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-info text-white custom-width round" type="submit">
@@ -32,7 +32,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="loginModalLabel">Log In</h5>
-                <button type="button" class="btn-close round" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="loginForm">
@@ -44,7 +44,9 @@
                         <label for="password" class="form-label ">Password</label>
                         <input type="password" class="form-control round" id="password"  name="password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary round">Log In</button>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn  btn-outline-info round">Log In</button>
+                    </div>
                 </form>
                 <div id="loginMessage" class="mt-3"></div> <!-- Add this line for login message -->
             </div>
@@ -74,7 +76,9 @@
                         <label for="signUpPassword" class="form-label">Password</label>
                         <input type="password" class="form-control round" id="signUpPassword" required>
                     </div>
-                    <button type="submit" class="btn btn-primary round">Sign Up</button>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn  btn-outline-info round">Sign Up</button>
+                    </div>
                 </form>
                 <div id="signUpMessage" class="mt-3"></div> <!-- Add this line for sign-up message -->
             </div>

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const movieCard = document.createElement('div');
                     movieCard.classList.add('col-md-4', 'mb-4', 'd-flex', 'align-items-stretch');
                     movieCard.innerHTML = `
-                        <div class="card h-100 round" data-bs-theme="dark">
+                        <div class="card h-100 w-100 round" data-bs-theme="dark">
                             <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" class="card-img-top" alt="${movie.title}">
                             <div class="card-body text-center d-flex flex-column justify-content-between">
                                 <h5 class="card-title">${movie.title}</h5>
