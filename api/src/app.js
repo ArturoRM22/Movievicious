@@ -1,13 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import session from 'express-session';
-import passport from 'passport';
 import axios from 'axios';
-import { Strategy as LocalStrategy } from 'passport-local';
-import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import User from './models/user.js';
 import Movieroutes from './routes/movies.routes.js';
 import userRoutes from './routes/user.routes.js';
 

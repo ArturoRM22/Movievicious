@@ -1,6 +1,5 @@
 import User from '../models/user.js';  // Adjust the path as needed
 import {pool} from '../db_connection.js';
-import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
@@ -45,15 +44,6 @@ const logIn = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
-/* const logOut =  (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            return res.status(500).json({ message: 'Logout failed.' });
-        }
-        res.json({ message: 'Logout successful!' });
-    });
-}; */
 
 const getUserDetails = async (req, res) => {
     try {
