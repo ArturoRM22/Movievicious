@@ -81,7 +81,7 @@ const getUserRanksWithDetails = async (req, res) => {
 
     try {
         // Fetch user ranks from database
-        const [ranks] = await pool.query('SELECT tmdb_id, ranking FROM ranks WHERE user_id = ?', [user_id]);
+        const [ranks] = await pool.query('SELECT id, tmdb_id, ranking FROM ranks WHERE user_id = ?', [user_id]);
 
         // Array to store promises of movie detail requests
         const movieDetailPromises = ranks.map(async (rank) => {
@@ -112,12 +112,51 @@ const getUserRanksWithDetails = async (req, res) => {
     }
 };
 
+const deleteRanking = async (req, res) => {
+    const rank_id = req.params.id;
 
+    try {
+        // Assuming 'pool' is your database connection pool
+        const [result] = await pool.query('DELETE FROM ranks WHERE id = ?', [rank_id]);
+
+        // Check if any row was affected (optional but good for validation)
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Ranking deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Ranking not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting ranking:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const updateRanking = async (req, res) => {
+    const rank_id = req.params.id;
+    const { ranking } = req.body; // Assuming req.body contains the updated ranking data
+
+    try {
+        // Assuming 'pool' is your database connection pool
+        const [result] = await pool.query('UPDATE ranks SET ranking = ? WHERE id = ?', [ranking, rank_id]);
+
+        // Check if any row was affected (optional but good for validation)
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Ranking updated successfully' });
+        } else {
+            res.status(404).json({ message: 'Ranking not found' });
+        }
+    } catch (error) {
+        console.error('Error updating ranking:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 export const methods = {
     testConnection,
     getMovieDetails,
     getPopularMovies,
     postUserRanked,
-    getUserRanksWithDetails
+    getUserRanksWithDetails,
+    deleteRanking,
+    updateRanking
 };

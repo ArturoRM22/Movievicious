@@ -1,17 +1,20 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const movieId = getMovieIdFromUrl();
-    const userId = getUserIdFromLocalStorage();
+    let userId = getUserIdFromLocalStorage();
     console.log(movieId);
 
+    // Function to get movie ID from URL
     function getMovieIdFromUrl() {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get('id');
     }
 
+    // Function to get user ID from local storage
     function getUserIdFromLocalStorage() {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             console.error('JWT token not found.');
+            alert("Please log in to rank this movie")
             return null;
         }
 
@@ -24,26 +27,36 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
+    // Fetch and display movie details if movie ID is present
     if (movieId) {
-        //console.log("Intentó");
         await getMovieDetails(movieId);
     }
 
+    // Function to submit ranking
     function submitRanking(movieId) {
-        const rating = document.querySelector('input[name="rating"]:checked').value;
-        axios.post('http://localhost:3001/api/rank', {
-            user_id: userId,
-            tmdb_id: movieId,
-            ranking: rating
-        })
-        .then(response => {
-            console.log('Ranking submitted successfully:', response.data);
-        })
-        .catch(error => {
-            console.error('Error submitting ranking:', error);
-        });
+        userId = getUserIdFromLocalStorage();
+        if(userId){
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+            axios.post('http://localhost:3001/api/rank', {
+                user_id: userId,
+                tmdb_id: movieId,
+                ranking: rating
+            })
+            .then(response => { 
+                console.log('Ranking submitted successfully:', response.data);
+                alert('Ranking submitted successfully!!');
+            })
+            .catch(error => {
+                console.error('Error submitting ranking:', error);
+                alert('Error :(');
+            });
+        }else{
+            return null;
+        }
+
     }
 
+    // Function to fetch and display movie details
     async function getMovieDetails(movieId) {
         const options = {
             method: 'GET',
@@ -57,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, options);
             const movie = await response.json();
             const movieDetailsContainer = document.getElementById('movie-details');
-            movieDetailsContainer.innerHTML = `
+            movieDetailsContainer.innerHTML += `
                 <form id="rank-form">
                     <div class="row round">
                         <div class="col-3 round">
@@ -68,27 +81,37 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <p>General grade of the movie</p>
                             <div class="star-rating" data-rating="${Math.round(movie.vote_average / 2)}"></div>
                             <p class="card-text">${movie.overview}</p>
-                            <p>Your Grade of the movie</p>
-                            <div class="container mt-5">
-                                <div class="star-rating2">
-                                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">★</label>
-                                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">★</label>
-                                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">★</label>
-                                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">★</label>
-                                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">★</label>
+                            ${userId ? `
+                                <p>Your Grade of the movie</p>
+                                <div class="container mt-5">
+                                    <div class="star-rating2">
+                                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">★</label>
+                                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">★</label>
+                                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">★</label>
+                                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">★</label>
+                                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">★</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <button type="submit" class="btn btn-outline-info round">Send your grade for this Movie</button>
+                                <button type="submit" class="btn btn-outline-info round">Send your grade for this Movie</button>
+                            ` : `
+                                <div class="alert alert-info mt-3 narrow-alert" role="alert">
+                                    Log in to rank this movie.
+                                </div>
+                            `}
                         </div>
                     </div>
                 </form>
             `;
 
-            // Attach event listener after form is rendered
-            document.getElementById('rank-form').addEventListener('submit', function(event) {
-                event.preventDefault();
-                submitRanking(movieId);
-            });
+            // Attach event listener after form is rendered if user is logged in
+
+            console.log(userId)
+            if (userId) {
+                document.getElementById('rank-form').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    submitRanking(movieId);
+                });
+            }
 
             // Initialize star ratings for movie details
             initializeStarRatings();
@@ -104,8 +127,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     });
 
-// Function to decode JWT token (assuming it's a simple base64 encoded token)
-function parseJwt(token) {
+    // Function to decode JWT token (assuming it's a simple base64 encoded token)
+    function parseJwt(token) {
         try {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -119,4 +142,27 @@ function parseJwt(token) {
             return {};
         }
     }
+
+    // Function to initialize star ratings (you may need to define this function as needed)
+    function initializeStarRatings() {
+        const starRatingElements = document.querySelectorAll('.star-rating');
+        starRatingElements.forEach(starRatingElement => {
+            const rating = starRatingElement.getAttribute('data-rating');
+            for (let i = 0; i < rating; i++) {
+                starRatingElement.innerHTML += '★';
+            }
+            for (let i = rating; i < 5; i++) {
+                starRatingElement.innerHTML += '☆';
+            }
+        });
+    }
 });
+
+// Add custom CSS for narrower alert
+const style = document.createElement('style');
+style.innerHTML = `
+    .narrow-alert {
+        max-width: 300px;
+    }
+`;
+document.head.appendChild(style);

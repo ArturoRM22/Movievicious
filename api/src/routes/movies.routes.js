@@ -14,12 +14,8 @@ router.post('/rank', moviesController.postUserRanked);
 
 router.get('/user-ranks/:id', moviesController.getUserRanksWithDetails);
 
-/* ------- */
-//Users
+router.delete('/delete-ranking/:id', moviesController.deleteRanking);
 
-router.get('/users', usersController.getUserDetails);
-
-router.post('/registrer', usersController.insertUser);
-
+router.patch('/update-ranking/:id', moviesController.updateRanking);
 
 export default router;

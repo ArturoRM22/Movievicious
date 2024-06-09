@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                     const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
                     loginModal.hide();
                     loginMessage.innerHTML = ''; // Clear the message after hiding
+                    window.location.reload(); // Reload the page after login
                 }, 2000);
 
                 toggleLoginButtons();
@@ -123,6 +124,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             console.log('Logout successful!');
             alert('You have been logged out successfully.');
             toggleLoginButtons();
+            window.location.reload(); // Reload the page after logout
         });
 
     } catch (error) {
