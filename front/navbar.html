@@ -13,8 +13,8 @@
                 <button id="loginButton" class="btn btn-outline-info col-3 round" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</button>
                 <button id="signupButton" class="btn btn-outline-info col-3  round" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</button>
                 <button id="logoutButton" class="btn btn-outline-danger col-4     round">Log Out</button> <!-- Add this line for logout button -->
-                <form id="search-form" class="d-flex ml-auto col-6" role="search">
-                    <input id="search-input" class="form-control me-2 round" type="search" placeholder="Search" aria-label="Search">
+                <form id="search-form" class="d-flex ml-auto col-6" role="search" action="answer.html" method="GET"> <!-- Add action and method attributes -->
+                    <input id="search-input" class="form-control me-2 round" type="search" placeholder="Search" aria-label="Search" name="search"> <!-- Add name attribute -->
                     <button class="btn btn-info text-white custom-width round" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -25,6 +25,7 @@
         </ul>
     </div>
 </nav>
+
 
 <!-- Login Modal -->
 <div class="modal fade text-white" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" data-bs-theme="dark">
@@ -85,47 +86,6 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const signUpForm = document.getElementById('signUpForm');
-
-    signUpForm.addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        const username = document.getElementById('signUpUsername').value;
-        const email = document.getElementById('signUpEmail').value;
-        const password = document.getElementById('signUpPassword').value;
-
-        if (!validateEmail(email)) {
-            alert('Please enter a valid email address.');
-            return;
-        }
-
-        try {
-            const response = await axios.post('http://localhost:3001/auth/register', {
-                username: username,
-                email: email,
-                password: password
-            });
-
-            if (response.status === 200) {
-                alert('Registration successful!');
-                signUpForm.reset();
-                bootstrap.Modal.getInstance(document.getElementById('signUpModal')).hide();
-            }
-        } catch (error) {
-            console.error('Error registering:', error);
-            alert('An error occurred during registration. Please try again.');
-        }
-    });
-
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
-});
-</script>
 
 <!-- Bootstrap and Axios scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
