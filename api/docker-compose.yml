@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql
+    env_file: ./.env
+    environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    - MYSQL_DATABASE=$DATABASE
+    ports:
+      - "$DB_PORT:$DB_PORT"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  app:
+    build: .
+    ports:
+      - "$PORT:$PORT"
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    environment:
+      DB_HOST: $DB_DOCKER_HOST
+      DB_PORT: $DB_PORT
+      DB_USER: $USER
+      DB_NAME: $DATABASE
