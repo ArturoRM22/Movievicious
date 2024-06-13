@@ -38,3 +38,6 @@ CREATE TABLE Ranks (
 - cd api
 - npm run dev
 
+
+
+# Install

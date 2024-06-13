@@ -1,4 +1,4 @@
-import User from '../models/user.js';  // Adjust the path as needed
+import User from '../models/User.js';  // Adjust the path as needed
 import {pool} from '../db_connection.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
