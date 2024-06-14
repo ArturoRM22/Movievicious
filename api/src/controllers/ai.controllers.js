@@ -1,6 +1,5 @@
 import { getUserRanksWithDetailsService } from './movies.controllers.js';
-import { getPersonalizedRecommendations } from './ai.Service.js';
-
+import axios from 'axios';
 
 const getPersonalizedRecommendationsHandler = async (req, res) => {
     const userId = req.params.userId;
@@ -20,8 +19,11 @@ const getPersonalizedRecommendationsHandler = async (req, res) => {
             ranking: rank.ranking
         }));
 
-        // Get recommendations from GPT
-        const recommendations = await getPersonalizedRecommendations(userRankings);
+        console.log("User rankings: ", userRankings);
+
+        // Make a POST request to the AI microservice
+        const response = await axios.post('http://localhost:3002/AI/recommendations', { userRankings });
+        const recommendations = response.data;
         res.status(200).json({ recommendations });
     } catch (error) {
         console.error('Error fetching recommendations from GPT:', error);

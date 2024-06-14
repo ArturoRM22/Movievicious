@@ -5,7 +5,7 @@ const openai = new OpenAI({
     apiKey: OPENAI_API_KEY
 });
 
-export const getPersonalizedRecommendations = async (userRankings) => {
+const getPersonalizedRecommendations = async (userRankings) => {
     console.log(userRankings);
     const prompt = `
         En base a estos rankigs de peliculas: ${JSON.stringify(userRankings)}, sugiere otras peliculas que le podrían gustar al usuario.
@@ -39,3 +39,19 @@ export const getPersonalizedRecommendations = async (userRankings) => {
         throw error;
     }
 };
+
+const handleRecommendations = async (req, res) => {
+    const { userRankings } = req.body;
+    console.log("User rankings: ", userRankings);
+    try {
+        const recommendations = await getPersonalizedRecommendations(userRankings);
+        res.json(recommendations);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+};
+
+export const methods = {
+    handleRecommendations
+};
+
