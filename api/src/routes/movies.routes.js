@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {methods as moviesController} from '../controllers/movies.controllers.js';
+import {methods as aiController} from '../controllers/ai.controllers.js';
 
 const router  = Router();
 
@@ -16,5 +17,7 @@ router.get('/user-ranks/:id', moviesController.getUserRanksWithDetails);
 router.delete('/delete-ranking/:id', moviesController.deleteRanking);
 
 router.patch('/update-ranking/:id', moviesController.updateRanking);
+
+router.get('/recommendations/:userId', aiController.getPersonalizedRecommendationsHandler);
 
 export default router;

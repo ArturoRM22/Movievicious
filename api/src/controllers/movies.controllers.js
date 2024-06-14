@@ -77,11 +77,59 @@ const getMovieDetails = async (movieId) => {
 };
 
 const getUserRanksWithDetails = async (req, res) => {
-    const user_id = req.params.id; // This should be dynamically retrieved, e.g., from the authenticated user
+    const user_id = req.params.id;
 
     try {
+        const ranksWithDetails = await getUserRanksWithDetailsService(user_id);
+        res.status(200).json({ status: 'success', data: ranksWithDetails });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Failed to get ranks with movie details' });
+    }
+};
+
+const deleteRanking = async (req, res) => {
+    const rank_id = req.params.id;
+
+    try {
+        // Assuming 'pool' is your database connection pool
+        const [result] = await pool.query('DELETE FROM Ranks WHERE id = ?', [rank_id]);
+
+        // Check if any row was affected (optional but good for validation)
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Ranking deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Ranking not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting ranking:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const updateRanking = async (req, res) => {
+    const rank_id = req.params.id;
+    const { ranking } = req.body; // Assuming req.body contains the updated ranking data
+
+    try {
+        // Assuming 'pool' is your database connection pool
+        const [result] = await pool.query('UPDATE Ranks SET ranking = ? WHERE id = ?', [ranking, rank_id]);
+
+        // Check if any row was affected (optional but good for validation)
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Ranking updated successfully' });
+        } else {
+            res.status(404).json({ message: 'Ranking not found' });
+        }
+    } catch (error) {
+        console.error('Error updating ranking:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const getUserRanksWithDetailsService = async (userId) => {
+    try {
         // Fetch user ranks from database
-        const [ranks] = await pool.query('SELECT id, tmdb_id, ranking FROM ranks WHERE user_id = ?', [user_id]);
+        const [ranks] = await pool.query('SELECT id, tmdb_id, ranking FROM Ranks WHERE user_id = ?', [userId]);
 
         // Array to store promises of movie detail requests
         const movieDetailPromises = ranks.map(async (rank) => {
@@ -103,51 +151,10 @@ const getUserRanksWithDetails = async (req, res) => {
 
         // Wait for all movie detail requests to complete
         const ranksWithDetails = await Promise.all(movieDetailPromises);
-
-        // Send the combined data back to the client
-        res.status(200).json({ status: 'success', data: ranksWithDetails });
+        return ranksWithDetails;
     } catch (error) {
         console.error('Database query error:', error);
-        res.status(500).json({ status: 'error', message: 'Failed to get ranks with movie details' });
-    }
-};
-
-const deleteRanking = async (req, res) => {
-    const rank_id = req.params.id;
-
-    try {
-        // Assuming 'pool' is your database connection pool
-        const [result] = await pool.query('DELETE FROM ranks WHERE id = ?', [rank_id]);
-
-        // Check if any row was affected (optional but good for validation)
-        if (result.affectedRows > 0) {
-            res.status(200).json({ message: 'Ranking deleted successfully' });
-        } else {
-            res.status(404).json({ message: 'Ranking not found' });
-        }
-    } catch (error) {
-        console.error('Error deleting ranking:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
-const updateRanking = async (req, res) => {
-    const rank_id = req.params.id;
-    const { ranking } = req.body; // Assuming req.body contains the updated ranking data
-
-    try {
-        // Assuming 'pool' is your database connection pool
-        const [result] = await pool.query('UPDATE ranks SET ranking = ? WHERE id = ?', [ranking, rank_id]);
-
-        // Check if any row was affected (optional but good for validation)
-        if (result.affectedRows > 0) {
-            res.status(200).json({ message: 'Ranking updated successfully' });
-        } else {
-            res.status(404).json({ message: 'Ranking not found' });
-        }
-    } catch (error) {
-        console.error('Error updating ranking:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        throw new Error('Failed to get ranks with movie details');
     }
 };
 

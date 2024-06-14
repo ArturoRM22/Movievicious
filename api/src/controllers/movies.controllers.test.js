@@ -151,7 +151,7 @@ describe('Movies Controllers', () => {
 
             await moviesController.getUserRanksWithDetails(req, res);
 
-            expect(pool.query).toHaveBeenCalledWith('SELECT id, tmdb_id, ranking FROM ranks WHERE user_id = ?', [user_id]);
+            expect(pool.query).toHaveBeenCalledWith('SELECT id, tmdb_id, ranking FROM Ranks WHERE user_id = ?', [user_id]);
             expect(moviesController.getMovieDetails).toHaveBeenCalledWith(mockRanks[0].tmdb_id);
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
@@ -177,7 +177,7 @@ describe('Movies Controllers', () => {
 
             await moviesController.getUserRanksWithDetails(req, res);
 
-            expect(pool.query).toHaveBeenCalledWith('SELECT id, tmdb_id, ranking FROM ranks WHERE user_id = ?', [user_id]);
+            expect(pool.query).toHaveBeenCalledWith('SELECT id, tmdb_id, ranking FROM Ranks WHERE user_id = ?', [user_id]);
             expect(res.status).toHaveBeenCalledWith(500);
             expect(res.json).toHaveBeenCalledWith({ status: 'error', message: 'Failed to get ranks with movie details' });
         });
@@ -197,7 +197,7 @@ describe('Movies Controllers', () => {
 
             await moviesController.deleteRanking(req, res);
 
-            expect(pool.query).toHaveBeenCalledWith('DELETE FROM ranks WHERE id = ?', [rank_id]);
+            expect(pool.query).toHaveBeenCalledWith('DELETE FROM Ranks WHERE id = ?', [rank_id]);
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({ message: 'Ranking deleted successfully' });
         });
@@ -216,7 +216,7 @@ describe('Movies Controllers', () => {
 
             await moviesController.deleteRanking(req, res);
 
-            expect(pool.query).toHaveBeenCalledWith('DELETE FROM ranks WHERE id = ?', [rank_id]);
+            expect(pool.query).toHaveBeenCalledWith('DELETE FROM Ranks WHERE id = ?', [rank_id]);
             expect(res.status).toHaveBeenCalledWith(500);
             expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
         });
@@ -237,7 +237,7 @@ describe('Movies Controllers', () => {
 
             await moviesController.updateRanking(req, res);
 
-            expect(pool.query).toHaveBeenCalledWith('UPDATE ranks SET ranking = ? WHERE id = ?', [updatedRanking, rank_id]);
+            expect(pool.query).toHaveBeenCalledWith('UPDATE Ranks SET ranking = ? WHERE id = ?', [updatedRanking, rank_id]);
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({ message: 'Ranking updated successfully' });
         });
@@ -257,7 +257,7 @@ describe('Movies Controllers', () => {
 
             await moviesController.updateRanking(req, res);
 
-            expect(pool.query).toHaveBeenCalledWith('UPDATE ranks SET ranking = ? WHERE id = ?', [updatedRanking, rank_id]);
+            expect(pool.query).toHaveBeenCalledWith('UPDATE Ranks SET ranking = ? WHERE id = ?', [updatedRanking, rank_id]);
             expect(res.status).toHaveBeenCalledWith(500);
             expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
         });

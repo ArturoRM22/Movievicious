@@ -9,6 +9,7 @@ const jwtSecret = 'your_jwt_secret';
 // Registration route
 const insertUser = async (req, res) => {
     const { username, email, password } = req.body;
+    console.log(username, email, password)
     try {
         // Check if user already exists
         const existingUser = await User.findByUsername(username);

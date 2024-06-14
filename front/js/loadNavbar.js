@@ -23,17 +23,23 @@ document.addEventListener("DOMContentLoaded", async function() {
             const logoutButton = document.getElementById('logoutButton');
             const signupButton = document.getElementById('signupButton');
             const yourRanksLink = document.getElementById('your_ranks');
+            const recommendationsButton = document.getElementById('recommendationsButton');
+
 
             if (isLoggedIn()) {
                 loginButton.style.display = 'none';
                 logoutButton.style.display = 'block';
                 signupButton.style.display = 'none';
                 yourRanksLink.style.display = 'block';
+                recommendationsButton.style.display = 'block';
+
             } else {
                 loginButton.style.display = 'block';
                 signupButton.style.display = 'block'; // Show signup button if not logged in
                 logoutButton.style.display = 'none';
                 yourRanksLink.style.display = 'none';
+                recommendationsButton.style.display = 'none';
+
             }
         }
 
@@ -127,7 +133,86 @@ document.addEventListener("DOMContentLoaded", async function() {
             window.location.reload(); // Reload the page after logout
         });
 
+        document.getElementById('recommendationsButton').addEventListener('click', async function() {
+            const userId = getUserIdFromLocalStorage(); // Replace with dynamic user ID if needed
+            const recommendationsContent = document.getElementById('recommendationsContent');
+
+            try {
+                const response = await axios.get(`http://localhost:3001/api/recommendations/${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                    }
+                });
+
+                console.log('Recommendations fetched successfully!', response.data);
+                const recommendations = response.data.recommendations;
+
+                // Convert recommendations to HTML
+                let recommendationsHtml = '<ul class="list-group">';
+                //console.log(recommendations)
+                if (recommendations == "No rankings found for the user.") {
+                    recommendationsHtml += '<p>No hay recomendaciones, necesitas añadir rankings para poderte recomendar películas</p>';
+                } else {
+                recommendations.forEach(rec => {
+                    if (rec.Recommendation) {
+                        recommendationsHtml += `
+                            <li class="list-group-item">
+                                <p><strong>Recomendación:</strong> ${rec.Recommendation}</p>
+                            </li>
+                        `;
+                    } else {
+                        recommendationsHtml += `
+                            <li class="list-group-item">
+                                <h5>${rec.title}</h5>
+                                <p>${rec.description}</p>
+                            </li>
+                        `;
+                    }
+                });
+            }
+                recommendationsHtml += '</ul>';
+
+                recommendationsContent.innerHTML = recommendationsHtml;
+            } catch (error) {
+                console.error('Error fetching recommendations:', error);
+                recommendationsContent.innerHTML = '<div class="alert alert-danger">Failed to fetch recommendations. Please try again.</div>';
+            }
+        });
+
     } catch (error) {
         console.error('Error loading HTML:', error);
     }
 });
+
+function getUserIdFromLocalStorage() {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        console.error('JWT token not found.');
+        alert("Please log in to interact with the page");
+        return null;
+    }
+
+    try {
+        const decodedToken = parseJwt(token);
+        return decodedToken.userId;
+    } catch (error) {
+        console.error('Error parsing JWT token:', error);
+        return null;
+    }
+}
+
+// Function to decode JWT token
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Error parsing JWT token:', error);
+        return {};
+    }
+}
