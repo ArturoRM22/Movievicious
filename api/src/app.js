@@ -1,9 +1,9 @@
-import express from 'express';
-import cors from 'cors';
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import Movieroutes from './routes/movies.routes.js';
-import userRoutes from './routes/user.routes.js';
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios');
+const jwt = require('jsonwebtoken');
+const Movieroutes = require('./routes/movies.routes.js');
+const userRoutes = require('./routes/user.routes.js');
 
 const app = express();
 
@@ -54,7 +54,7 @@ app.use('/api', Movieroutes);
 app.use('/auth', userRoutes);
 
 // Health endpoint
-export const callHealthEndpoint = async (port) => {
+const callHealthEndpoint = async (port) => {
     try {
         const response = await axios.get(`http://localhost:${port}/api/health`);
         console.log('Database status:', response.data.status);
@@ -70,4 +70,5 @@ app.use((req, res) => {
     });
 });
 
-export default app;
+module.exports = app;
+module.exports.callHealthEndpoint = callHealthEndpoint;

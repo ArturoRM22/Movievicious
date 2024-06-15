@@ -1,6 +1,6 @@
-import express from 'express';
-import cors from 'cors';
-import AIroutes from './routes/ai.routes.js';
+const express = require('express');
+const cors = require('cors');
+const AIroutes = require('./routes/ai.routes.js');
 
 const app = express();
 
@@ -18,4 +18,4 @@ app.use((req, res) => {
     });
 });
 
-export default app;
+module.exports = app;

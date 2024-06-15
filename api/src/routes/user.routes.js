@@ -1,7 +1,7 @@
-import {Router} from 'express';
-import {methods as usersController} from '../controllers/user.controllers.js';
+const express = require('express');
+const usersController = require('../controllers/user.controllers.js').methods;
 
-const router  = Router();
+const router = express.Router();
 
 router.get('/users', usersController.getUserDetails);
 
@@ -11,4 +11,4 @@ router.post('/login', usersController.logIn);
 
 //router.post('/logout', usersController.logOut);
 
-export default router;
+module.exports = router;

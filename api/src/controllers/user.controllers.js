@@ -1,7 +1,7 @@
-import User from '../models/User.js';  // Adjust the path as needed
-import {pool} from '../db_connection.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+const User = require('../models/User.js');  // Adjust the path as needed
+const { pool } = require('../db_connection.js');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 // Secret key for JWT
 const jwtSecret = 'your_jwt_secret';
@@ -9,7 +9,7 @@ const jwtSecret = 'your_jwt_secret';
 // Registration route
 const insertUser = async (req, res) => {
     const { username, email, password } = req.body;
-    console.log(username, email, password)
+    console.log(username, email, password);
     try {
         // Check if user already exists
         const existingUser = await User.findByUsername(username);
@@ -49,7 +49,7 @@ const logIn = async (req, res) => {
 const getUserDetails = async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM Users');
-        console.log(rows)
+        console.log(rows);
         res.status(200).json({ status: 'success', data: rows });
     } catch (error) {
         console.error('Database connection error:', error);
@@ -57,8 +57,12 @@ const getUserDetails = async (req, res) => {
     }
 };
 
-export const methods = {
+const methods = {
   insertUser,
   logIn,
   getUserDetails
+};
+
+module.exports = {
+  methods
 };

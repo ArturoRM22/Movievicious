@@ -1,8 +1,8 @@
-import {Router} from 'express';
-import {methods as aiController} from '../controllers/ai.Service.js';
+const express = require('express');
+const aiController = require('../controllers/ai.Service.js').methods;
 
-const router  = Router();
+const router = express.Router();
 
 router.post('/recommendations', aiController.handleRecommendations);
 
-export default router;
+module.exports = router;

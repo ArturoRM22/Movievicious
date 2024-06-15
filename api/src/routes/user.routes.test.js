@@ -1,90 +1,59 @@
-// /src/routes/user.routes.test.js
-import request from 'supertest';
-import express from 'express';
-import router from './user.routes.js'; // Ensure correct path to your user.routes.js
-import { methods as usersController } from '../controllers/user.controllers.js'; // Ensure correct path to your user.controllers.js
+// __tests__/users.routes.test.js
 
-// Mock the controller methods
+const request = require('supertest');
+const express = require('express');
+const usersRouter = require('../routes/user.routes.js');
+const usersController = require('../controllers/user.controllers.js').methods;
+
 jest.mock('../controllers/user.controllers.js', () => ({
-    methods: {
-        getUserDetails: jest.fn(),
-        insertUser: jest.fn(),
-        logIn: jest.fn(),
-        // logOut: jest.fn(), // Uncomment if you have a logOut method
-    }
+  methods: {
+    getUserDetails: jest.fn(),
+    insertUser: jest.fn(),
+    logIn: jest.fn(),
+  },
 }));
 
-// Initialize the express app
 const app = express();
-app.use(express.json());
-app.use(router);
+app.use(express.json()); // For parsing application/json
+app.use('/', usersRouter);
 
-describe('User Routes', () => {
-    afterEach(() => {
-        jest.clearAllMocks();
+describe('Users Routes', () => {
+  describe('GET /users', () => {
+    it('should return user details', async () => {
+      const mockUserDetails = { id: 1, name: 'John Doe' };
+      usersController.getUserDetails.mockImplementation((req, res) => res.json(mockUserDetails));
+
+      const res = await request(app).get('/users');
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual(mockUserDetails);
+      expect(usersController.getUserDetails).toHaveBeenCalled();
     });
+  });
 
-    describe('GET /users', () => {
-        it('should call getUserDetails controller', async () => {
-            usersController.getUserDetails.mockImplementation((req, res) => {
-                res.status(200).json({ message: 'User details' });
-            });
+  describe('POST /register', () => {
+    it('should insert a user', async () => {
+      const mockUser = { id: 1, name: 'John Doe' };
+      usersController.insertUser.mockImplementation((req, res) => res.status(201).json(mockUser));
 
-            const response = await request(app).get('/users');
+      const res = await request(app).post('/register').send({ name: 'John Doe' });
 
-            expect(usersController.getUserDetails).toHaveBeenCalled();
-            expect(response.status).toBe(200);
-            expect(response.body).toEqual({ message: 'User details' });
-        });
+      expect(res.statusCode).toEqual(201);
+      expect(res.body).toEqual(mockUser);
+      expect(usersController.insertUser).toHaveBeenCalled();
     });
+  });
 
-    describe('POST /register', () => {
-        it('should call insertUser controller', async () => {
-            usersController.insertUser.mockImplementation((req, res) => {
-                res.status(201).json({ message: 'User registered' });
-            });
+  describe('POST /login', () => {
+    it('should log in a user', async () => {
+      const mockLoginResponse = { token: 'abcd1234' };
+      usersController.logIn.mockImplementation((req, res) => res.json(mockLoginResponse));
 
-            const response = await request(app).post('/register').send({
-                username: 'testuser',
-                email: 'testuser@example.com',
-                password: 'password123'
-            });
+      const res = await request(app).post('/login').send({ username: 'john', password: 'password' });
 
-            expect(usersController.insertUser).toHaveBeenCalled();
-            expect(response.status).toBe(201);
-            expect(response.body).toEqual({ message: 'User registered' });
-        });
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual(mockLoginResponse);
+      expect(usersController.logIn).toHaveBeenCalled();
     });
-
-    describe('POST /login', () => {
-        it('should call logIn controller', async () => {
-            usersController.logIn.mockImplementation((req, res) => {
-                res.status(200).json({ message: 'User logged in' });
-            });
-
-            const response = await request(app).post('/login').send({
-                username: 'testuser',
-                password: 'password123'
-            });
-
-            expect(usersController.logIn).toHaveBeenCalled();
-            expect(response.status).toBe(200);
-            expect(response.body).toEqual({ message: 'User logged in' });
-        });
-    });
-
-    // Uncomment and update the following test if you have a logOut method
-    // describe('POST /logout', () => {
-    //     it('should call logOut controller', async () => {
-    //         usersController.logOut.mockImplementation((req, res) => {
-    //             res.status(200).json({ message: 'User logged out' });
-    //         });
-
-    //         const response = await request(app).post('/logout');
-
-    //         expect(usersController.logOut).toHaveBeenCalled();
-    //         expect(response.status).toBe(200);
-    //         expect(response.body).toEqual({ message: 'User logged out' });
-    //     });
-    // });
+  });
 });

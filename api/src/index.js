@@ -1,7 +1,7 @@
-import app from './app.js';
-import {PORT} from './config.js';
-/* import { callHealthEndpoint } from './app.js'; */
+const app = require('./app.js');
+const { PORT } = require('./config.js');
+/* const { callHealthEndpoint } = require('./app.js'); */
 
 app.listen(PORT);
-console.log('Sever running on port', PORT);
-/* callHealthEndpoint(PORT);  */
+console.log('Server running on port', PORT);
+/* callHealthEndpoint(PORT); */

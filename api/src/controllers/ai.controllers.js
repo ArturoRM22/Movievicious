@@ -1,6 +1,6 @@
-import { getUserRanksWithDetailsService } from './movies.controllers.js';
-import axios from 'axios';
-import { AI_DOCKER_HOST } from '../config.js';
+const { getUserRanksWithDetailsService } = require('./movies.controllers.js');
+const axios = require('axios');
+const { AI_DOCKER_HOST } = require('../config.js');
 
 const getPersonalizedRecommendationsHandler = async (req, res) => {
     const userId = req.params.userId;
@@ -22,7 +22,7 @@ const getPersonalizedRecommendationsHandler = async (req, res) => {
 
         console.log("User rankings: ", userRankings);
 
-        // Make a POST request to the AI microservice, make sure you put localhost istead of AI_DOCKER_HOST if you are running locally
+        // Make a POST request to the AI microservice, make sure you put localhost instead of AI_DOCKER_HOST if you are running locally
         const response = await axios.post(`http://${AI_DOCKER_HOST}:3002/AI/recommendations`, { userRankings });
         const recommendations = response.data;
         res.status(200).json({ recommendations });
@@ -32,6 +32,10 @@ const getPersonalizedRecommendationsHandler = async (req, res) => {
     }
 };
 
-export const methods = {
+const methods = {
     getPersonalizedRecommendationsHandler
+};
+
+module.exports = {
+    methods
 };

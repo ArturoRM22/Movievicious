@@ -1,5 +1,5 @@
-import OpenAI from 'openai';
-import { OPENAI_API_KEY } from '../config.js';
+const OpenAI = require('openai');
+const { OPENAI_API_KEY } = require('../config.js');
 
 const openai = new OpenAI({
     apiKey: OPENAI_API_KEY
@@ -46,12 +46,15 @@ const handleRecommendations = async (req, res) => {
     try {
         const recommendations = await getPersonalizedRecommendations(userRankings);
         res.json(recommendations);
-      } catch (error) {
+    } catch (error) {
         res.status(500).json({ error: error.message });
-      }
+    }
 };
 
-export const methods = {
+const methods = {
     handleRecommendations
 };
 
+module.exports = {
+    methods
+};

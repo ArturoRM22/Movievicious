@@ -1,5 +1,5 @@
-import {pool} from '../db_connection.js'; // Ensure correct path to your database connection file
-import bcrypt from 'bcryptjs';
+const { pool } = require('../db_connection.js'); // Ensure correct path to your database connection file
+const bcrypt = require('bcryptjs');
 
 const User = {
     async findByUsername(username) {
@@ -19,4 +19,4 @@ const User = {
     }
 };
 
-export default User;
+module.exports = User;

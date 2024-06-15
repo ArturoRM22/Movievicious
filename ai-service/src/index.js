@@ -1,5 +1,5 @@
-import app from './app.js';
-import {PORT_AI_SERVICE} from './config.js';
+const app = require('./app.js');
+const { PORT_AI_SERVICE } = require('./config.js');
 
 app.listen(PORT_AI_SERVICE);
-console.log('Sever running on port', PORT_AI_SERVICE);
+console.log('Server running on port', PORT_AI_SERVICE);

@@ -1,8 +1,11 @@
-import { methods as userController } from './user.controllers.js';
-import User from '../models/User.js';
-import { pool } from '../db_connection.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+// __tests__/user.controllers.test.js
+
+const { methods: userController } = require('../controllers/user.controllers.js');
+const User = require('../models/User.js');
+const { pool } = require('../db_connection.js');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const jestMock = require('jest-mock'); // Using jest-mock to avoid using ES6 import
 
 // Mocking dependencies
 jest.mock('../models/User.js');
@@ -18,8 +21,8 @@ describe('User Controller', () => {
             body: {}
         };
         res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn().mockReturnThis()
+            status: jestMock.fn().mockReturnThis(),
+            json: jestMock.fn().mockReturnThis()
         };
     });
 

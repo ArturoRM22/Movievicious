@@ -1,8 +1,8 @@
-import {Router} from 'express';
-import {methods as moviesController} from '../controllers/movies.controllers.js';
-import {methods as aiController} from '../controllers/ai.controllers.js';
+const express = require('express');
+const moviesController = require('../controllers/movies.controllers.js').methods;
+const aiController = require('../controllers/ai.controllers.js').methods;
 
-const router  = Router();
+const router = express.Router();
 
 router.get('/health', moviesController.testConnection);
 
@@ -20,4 +20,4 @@ router.patch('/update-ranking/:id', moviesController.updateRanking);
 
 router.get('/recommendations/:userId', aiController.getPersonalizedRecommendationsHandler);
 
-export default router;
+module.exports = router;
