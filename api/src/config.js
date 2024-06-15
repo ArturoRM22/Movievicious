@@ -19,6 +19,7 @@ console.log({
     ACCESS_TOKEN_AUTH: process.env.ACCESS_TOKEN_AUTH,
     DB_DOCKER_HOST: process.env.DB_DOCKER_HOST,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    AI_DOCKER_HOST: process.env.AI_DOCKER_HOST,
 })
 
 export const PORT = process.env.PORT || 4000;
@@ -30,3 +31,4 @@ export const DB_PORT = process.env.DB_PORT || '3306';
 export const ACCESS_TOKEN_AUTH = process.env.ACCESS_TOKEN_AUTH;
 export const DB_DOCKER_HOST = process.env.DB_DOCKER_HOST;
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+export const AI_DOCKER_HOST = process.env.AI_DOCKER_HOST;
