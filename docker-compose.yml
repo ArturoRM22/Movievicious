@@ -14,16 +14,36 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    volumes:
+      - db_data:/var/lib/mysql  # Persist database data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   app:
-    build: .
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     ports:
       - "$PORT:$PORT"
+    env_file: ./.env
     depends_on:
       mysqldb:
         condition: service_healthy
+      ai-service:
+        condition: service_started
     environment:
       DB_HOST: $DB_DOCKER_HOST
       DB_PORT: $DB_PORT
       DB_USER: $USER
       DB_NAME: $DATABASE
+      
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile.ai
+    ports:
+      - "$PORT_AI_SERVICE:$PORT_AI_SERVICE"
+    env_file: ./.env
+    environment:
+      OPENAI_API_KEY: $OPENAI_API_KEY
+volumes:
+  db_data:

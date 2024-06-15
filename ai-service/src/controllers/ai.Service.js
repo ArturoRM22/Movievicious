@@ -42,7 +42,7 @@ const getPersonalizedRecommendations = async (userRankings) => {
 
 const handleRecommendations = async (req, res) => {
     const { userRankings } = req.body;
-    console.log("User rankings: ", userRankings);
+    //console.log("User rankings: ", userRankings);
     try {
         const recommendations = await getPersonalizedRecommendations(userRankings);
         res.json(recommendations);

@@ -1,9 +1,10 @@
 FROM node:18
 
-WORKDIR /movicious
+WORKDIR /ai-service
 COPY package.json .
 RUN npm install
 
 COPY  . .
 
+EXPOSE 3002
 CMD npm start

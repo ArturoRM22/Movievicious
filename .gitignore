@@ -1,0 +1,4 @@
+node_modules/
+api/node_modules/
+ai-service/node_modules/
+.env

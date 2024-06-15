@@ -1,6 +1,25 @@
-import {config} from 'dotenv';
+import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-config();
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables from the root .env file
+config({ path: resolve(__dirname, '../../.env') });
+
+console.log({
+    PORT: process.env.PORT,
+    USER: process.env.USER,
+    PASSWORD: process.env.PASSWORD,
+    HOST: process.env.HOST,
+    DATABASE: process.env.DATABASE,
+    DB_PORT: process.env.DB_PORT,
+    ACCESS_TOKEN_AUTH: process.env.ACCESS_TOKEN_AUTH,
+    DB_DOCKER_HOST: process.env.DB_DOCKER_HOST,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+})
 
 export const PORT = process.env.PORT || 4000;
 export const USER = process.env.USER || 'root';
