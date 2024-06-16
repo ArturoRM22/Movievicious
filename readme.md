@@ -19,8 +19,8 @@ Movicious is a web application that allows users to rate movies and get recommen
 - cd api
 ## Install dependencies:
 - npm i
-- Do the same but for the AI service just go to the ai-service folder and run npm i
-## Create a .env file in the root directory of the api with the following environment variables:
+- Do the same but for the AI service just go to the ai-service (cd .. then cd ai-service) folder and run npm i
+## Create a .env file in the root directory with the following environment variables:
 ```	
 HOST=localhost
 USER=root
